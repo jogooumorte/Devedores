@@ -1,73 +1,39 @@
-body {
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: #fff;
-  margin: 0;
-  padding: 20px;
-  min-height: 100vh;
-}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Controle de Devedores</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Controle de Devedores</h1>
 
-.container {
-  max-width: 600px;
-  margin: 0 auto;
-  background: rgba(0,0,0,0.5);
-  padding: 20px;
-  border-radius: 8px;
-}
+    <form id="formCliente">
+      <input type="hidden" id="clienteId" value="" />
+      <label for="nome">Nome:</label>
+      <input type="text" id="nome" required />
 
-h1, h2 {
-  text-align: center;
-}
+      <label for="divida">Valor da Dívida (R$):</label>
+      <input type="number" id="divida" min="0" step="0.01" required />
 
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
-}
+      <label for="status">Status:</label>
+      <select id="status" required>
+        <option value="devedor">Devedor</option>
+        <option value="quite">Quite</option>
+      </select>
 
-input, select, button {
-  padding: 8px;
-  border-radius: 4px;
-  border: none;
-  font-size: 1em;
-}
+      <button type="submit">Salvar</button>
+      <button type="button" id="btnCancelar" style="display:none;">Cancelar</button>
+    </form>
 
-button {
-  background-color: #764ba2;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
+    <section>
+      <h2>Lista de Clientes</h2>
+      <div id="listaClientes"></div>
+    </section>
+  </div>
 
-button:hover {
-  background-color: #5a3680;
-}
-
-#listaClientes {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.card {
-  background: rgba(255,255,255,0.1);
-  padding: 15px;
-  border-radius: 6px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.card .info {
-  flex-grow: 1;
-}
-
-.card .actions button {
-  margin-left: 10px;
-  background-color: #444;
-}
-
-.card .actions button:hover {
-  background-color: #222;
-}
+  <script src="script.js"></script>
+</body>
+</html>
