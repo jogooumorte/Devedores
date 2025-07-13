@@ -2,49 +2,95 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Controle de Devedores</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Editor ao Vivo - HTML e CSS</title>
+  <style id="styleEditor">
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f0f0f0;
+      color: #333;
+    }
+    #editorContainer {
+      display: flex;
+      gap: 20px;
+    }
+    textarea {
+      width: 50%;
+      height: 300px;
+      font-family: monospace;
+      font-size: 14px;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      resize: vertical;
+    }
+    #preview {
+      width: 50%;
+      background: white;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      padding: 15px;
+      overflow: auto;
+      height: 300px;
+    }
+    h1 {
+      margin-top: 0;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Controle de Devedores</h1>
 
-    <!-- Área de mensagens para erros e sucessos -->
-    <div id="mensagem" role="alert" aria-live="polite" style="margin-bottom: 15px; font-weight: bold;"></div>
+  <h1>Editor ao Vivo de HTML e CSS</h1>
+  <p>Edite o HTML e CSS abaixo e veja o resultado instantaneamente:</p>
 
-    <form id="formCliente">
-      <input type="hidden" id="clienteId" value="" />
-      <label for="nome">Nome:</label>
-      <input type="text" id="nome" placeholder="Nome do cliente" required />
+  <div id="editorContainer">
+    <textarea id="htmlEditor" placeholder="Escreva seu HTML aqui...">
+<div>
+  <h2>Exemplo de título</h2>
+  <p>Este é um parágrafo editável.</p>
+</div>
+    </textarea>
 
-      <label for="divida">Valor da Dívida (R$):</label>
-      <input type="number" id="divida" min="0" step="0.01" placeholder="0,00" required />
-
-      <label for="status">Status:</label>
-      <select id="status" required>
-        <option value="devedor">Devedor</option>
-        <option value="quite">Quite</option>
-      </select>
-
-      <div class="botoes">
-        <button type="submit">Salvar</button>
-        <button type="button" id="btnCancelar" style="display:none;">Cancelar</button>
-      </div>
-    </form>
-
-    <section class="resumo">
-      <h2>Resumo</h2>
-      <p id="totalClientes">Total de clientes: 0</p>
-      <p id="totalDividas">Total de dívidas: R$ 0,00</p>
-    </section>
-
-    <section>
-      <h2>Lista de Clientes</h2>
-      <div id="listaClientes"></div>
-    </section>
+    <textarea id="cssEditor" placeholder="Escreva seu CSS aqui...">
+div {
+  border: 2px solid #2980b9;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: #eaf4fc;
+}
+h2 {
+  color: #2980b9;
+}
+p {
+  font-size: 16px;
+}
+    </textarea>
   </div>
 
-  <script src="script.js"></script>
+  <h2>Visualização</h2>
+  <div id="preview"></div>
+
+  <script>
+    const htmlEditor = document.getElementById('htmlEditor');
+    const cssEditor = document.getElementById('cssEditor');
+    const preview = document.getElementById('preview');
+    const styleTag = document.getElementById('styleEditor');
+
+    function atualizarPreview() {
+      // Atualiza o conteúdo HTML
+      preview.innerHTML = htmlEditor.value;
+
+      // Atualiza o CSS
+      styleTag.textContent = cssEditor.value;
+    }
+
+    // Atualiza o preview sempre que o usuário digitar
+    htmlEditor.addEventListener('input', atualizarPreview);
+    cssEditor.addEventListener('input', atualizarPreview);
+
+    // Inicializa o preview na carga da página
+    window.onload = atualizarPreview;
+  </script>
+
 </body>
 </html>
