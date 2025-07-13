@@ -1,136 +1,138 @@
-const form = document.getElementById('formCliente');
-const listaClientes = document.getElementById('listaClientes');
-const btnCancelar = document.getElementById('btnCancelar');
-
-let clientes = [];
-let editandoId = null;
-
-// Função para carregar clientes do servidor
-function carregarClientes() {
-  fetch('listar.php')
-    .then(res => res.json())
-    .then(data => {
-      clientes = data || [];
-      renderizarLista();
-    })
-    .catch(() => alert('Erro ao carregar clientes.'));
+/* Reset básico */
+* {
+  box-sizing: border-box;
 }
 
-// Renderiza a lista na tela
-function renderizarLista() {
-  listaClientes.innerHTML = '';
-  if (clientes.length === 0) {
-    listaClientes.innerHTML = '<p>Nenhum cliente cadastrado.</p>';
-    return;
-  }
-
-  clientes.forEach((cliente, index) => {
-    const card = document.createElement('div');
-    card.className = 'card';
-
-    const info = document.createElement('div');
-    info.className = 'info';
-    info.innerHTML = `
-      <strong>${cliente.nome}</strong><br/>
-      Dívida: R$ ${parseFloat(cliente.divida).toFixed(2)}<br/>
-      Status: ${cliente.status === 'devedor' ? 'Devedor' : 'Quite'}
-    `;
-
-    const actions = document.createElement('div');
-    actions.className = 'actions';
-
-    const btnEditar = document.createElement('button');
-    btnEditar.textContent = 'Editar';
-    btnEditar.onclick = () => editarCliente(index);
-
-    const btnExcluir = document.createElement('button');
-    btnExcluir.textContent = 'Excluir';
-    btnExcluir.onclick = () => excluirCliente(index);
-
-    actions.appendChild(btnEditar);
-    actions.appendChild(btnExcluir);
-
-    card.appendChild(info);
-    card.appendChild(actions);
-
-    listaClientes.appendChild(card);
-  });
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f0f2f5;
+  color: #333;
+  margin: 0;
+  padding: 20px;
 }
 
-// Editar cliente
-function editarCliente(index) {
-  const cliente = clientes[index];
-  document.getElementById('clienteId').value = index;
-  document.getElementById('nome').value = cliente.nome;
-  document.getElementById('divida').value = cliente.divida;
-  document.getElementById('status').value = cliente.status;
-  editandoId = index;
-  btnCancelar.style.display = 'inline-block';
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
 }
 
-// Excluir cliente
-function excluirCliente(index) {
-  if (!confirm('Deseja realmente excluir este cliente?')) return;
-
-  fetch('excluir.php', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({id: index})
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.success) {
-      carregarClientes();
-    } else {
-      alert('Erro ao excluir cliente.');
-    }
-  });
+h1, h2 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 20px;
 }
 
-// Cancelar edição
-btnCancelar.onclick = () => {
-  form.reset();
-  editandoId = null;
-  btnCancelar.style.display = 'none';
-};
+form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 30px;
+}
 
-// Envio do formulário
-form.onsubmit = e => {
-  e.preventDefault();
-  const nome = document.getElementById('nome').value.trim();
-  const divida = document.getElementById('divida').value;
-  const status = document.getElementById('status').value;
+form label {
+  flex-basis: 100%;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
 
-  if (!nome || divida === '') {
-    alert('Preencha todos os campos.');
-    return;
-  }
+form input[type="text"],
+form input[type="number"],
+form select {
+  flex-grow: 1;
+  padding: 10px 12px;
+  font-size: 1rem;
+  border: 1.5px solid #ccc;
+  border-radius: 8px;
+  transition: border-color 0.3s ease;
+}
 
-  const cliente = { nome, divida: parseFloat(divida), status };
+form input[type="text"]:focus,
+form input[type="number"]:focus,
+form select:focus {
+  border-color: #2980b9;
+  outline: none;
+}
 
-  let url = 'salvar.php';
-  if (editandoId !== null) {
-    cliente.id = editandoId;
-    url = 'editar.php';
-  }
+.botoes {
+  flex-basis: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 10px;
+}
 
-  fetch(url, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(cliente)
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.success) {
-      form.reset();
-      editandoId = null;
-      btnCancelar.style.display = 'none';
-      carregarClientes();
-    } else {
-      alert('Erro ao salvar cliente.');
-    }
-  });
-};
+button {
+  padding: 12px 25px;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #2980b9;
+  color: white;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
 
-// Inicializa a lista ao carregar a página
-carregarClientes();
+button:hover {
+  background-color: #1c5980;
+}
+
+#btnCancelar {
+  background-color: #e74c3c;
+}
+
+#btnCancelar:hover {
+  background-color: #b63123;
+}
+
+.resumo {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 1.1rem;
+  color: #34495e;
+}
+
+#listaClientes {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.card {
+  background: #ecf0f1;
+  padding: 18px 25px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+
+.card .info {
+  flex-grow: 1;
+  color: #2c3e50;
+  font-size: 1rem;
+}
+
+.card .info strong {
+  font-size: 1.15rem;
+}
+
+.card .actions button {
+  margin-left: 10px;
+  background-color: #7f8c8d;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: none;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.card .actions button:hover {
+  background-color: #34495e;
+}
